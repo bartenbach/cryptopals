@@ -1,4 +1,4 @@
-package main
+package challenge_1
 
 import (
     "fmt"
@@ -9,21 +9,7 @@ import (
     "encoding/base64"
 )
 
-func main() {
-    // get input string
-    var value string = getString()
-
-    // decode hex
-    var decoded []byte = decodeHex(value)
-
-    // encode base64
-    var encoded = encodeBase64(decoded)
-
-    // print result
-    fmt.Println(string(encoded))
-}
-
-func getString() string {
+func GetString() string {
     reader := bufio.NewReader(os.Stdin)
     fmt.Print("Enter the string to decode: ")
     value, err := reader.ReadString('\n')
@@ -35,7 +21,7 @@ func getString() string {
     return value[:len(value) - 1]
 }
 
-func decodeHex(value string) []byte {
+func DecodeHex(value string) []byte {
     decoded, err := hex.DecodeString(value)
     if err != nil {
         log.Fatal(err)
@@ -45,6 +31,6 @@ func decodeHex(value string) []byte {
     }
 }
 
-func encodeBase64(value []byte) string {
+func EncodeBase64(value []byte) string {
     return base64.URLEncoding.EncodeToString(value)
 }
