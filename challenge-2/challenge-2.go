@@ -1,15 +1,16 @@
-package main
+package challenge_2
 
-import "fmt"
-import "../challenge-1"
+import (
+    "github.com/hashicorp/vault/helper/xor"
+    "log"
+)
 
-func main() {
-
-    var input string = challenge_1.GetString()
-
-    var decoded = challenge_1.DecodeHex(input)
-
-    
-
-    fmt.Println(decoded)
+func XORvalues(value1, value2 []byte) []byte  {
+    var xored, err = xor.XORBytes(value1,value2)
+    if err != nil {
+        log.Fatal(err)
+        return nil
+    } else {
+        return xored
+    }
 }

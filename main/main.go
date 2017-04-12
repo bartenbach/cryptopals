@@ -1,10 +1,16 @@
 package main
 
-import "fmt"
-import "../challenge-1"
+import (
+    "../challenge-1"
+    "../challenge-2"
+    "fmt"
+    "encoding/hex"
+)
 
+// proof of completing challenges can be easily uncommented and proven here
 func main() {
-    challenge2()
+    //challenge1()
+    //challenge2()
 }
 
 func challenge1() {
@@ -22,5 +28,15 @@ func challenge1() {
 }
 
 func challenge2() {
+    // get first hex value and decode
+    var input string = challenge_1.GetString()
+    var decoded = challenge_1.DecodeHex(input)
 
+    // get second hex value and decode
+    var input2 string = challenge_1.GetString()
+    var decoded2 = challenge_1.DecodeHex(input2)
+
+    // XOR against each other and encode to hex
+    var xored = challenge_2.XORvalues(decoded, decoded2)
+    fmt.Println(hex.EncodeToString(xored))
 }

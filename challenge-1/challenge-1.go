@@ -11,7 +11,7 @@ import (
 
 func GetString() string {
     reader := bufio.NewReader(os.Stdin)
-    fmt.Print("Enter the string to decode: ")
+    fmt.Print("Enter string: ")
     value, err := reader.ReadString('\n')
     if err != nil {
         fmt.Println("could not read string!")
