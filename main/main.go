@@ -53,3 +53,7 @@ func challenge3() {
     var xored = challenge_2.XORvalues(decoded, s0)
     fmt.Println(string(xored))
 }
+
+func challenge4() {
+
+}
