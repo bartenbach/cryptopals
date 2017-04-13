@@ -34,34 +34,33 @@ func main() {
     for i:=0; i<26; i++ {
         letter := byte(alphabet[i])
         checkAgainstFile(letter,scanner)
-
     }
 }
 
 func checkAgainstFile(letter byte, scanner *bufio.Scanner) {
     // create array to XOR bytes against
-        s0 := bytes.Repeat([]byte{letter}, 30)
-        lowercase := strings.ToLower(string(letter))
-        lowercasebyte := []byte(lowercase)
-        s1 := bytes.Repeat([]byte{lowercasebyte[0]}, 30)
-        // scan file line by line and XOR against array
-        for scanner.Scan() {
-            var decoded = challenge_1.DecodeHex(scanner.Text())
-            var xored = challenge_2.XORvalues(s0, decoded)
-            var xoredLower = challenge_2.XORvalues(s1, decoded)
-            var xstring string = string(xored)
-            var xstringLower string = string(xoredLower)
+    s0 := bytes.Repeat([]byte{letter}, 30)
+    lowercase := strings.ToLower(string(letter))
+    lowercasebyte := []byte(lowercase)
+    s1 := bytes.Repeat([]byte{lowercasebyte[0]}, 30)
+    // scan file line by line and XOR against array
+    for scanner.Scan() {
+        var decoded = challenge_1.DecodeHex(scanner.Text())
+        var xored = challenge_2.XORvalues(s0, decoded)
+        var xoredLower = challenge_2.XORvalues(s1, decoded)
+        var xstring string = string(xored)
+        var xstringLower string = string(xoredLower)
 
-            // attempt to cut down on crap by scoring the english language
-            // likely any english sentence will contain an 'e' whereas most
-            // of the junk that comes out does not...
-            //if (strings.Contains(xstring, "e")) {
-                fmt.Println(xstring)
-            //}
-            //if (strings.Contains(xstringLower, "e")) {
-                fmt.Println(xstringLower)
-            //}
-        }
+        // attempt to cut down on crap by scoring the english language
+        // likely any english sentence will contain an 'e' whereas most
+        // of the junk that comes out does not...
+        //if (strings.Contains(xstring, "e")) {
+            fmt.Println(xstring)
+        //}
+        //if (strings.Contains(xstringLower, "e")) {
+            fmt.Println(xstringLower)
+        //}
+    }
 }
 
 func check(e error) {
