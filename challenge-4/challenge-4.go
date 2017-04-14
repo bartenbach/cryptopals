@@ -27,11 +27,14 @@ func main() {
     scanner := bufio.NewScanner(file)
 
     // create alphabet array
-    alphabet := [26]byte{ 'A','B','C','D','E','F','G','H','I','J','K','L',
-            'M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'}
+    alphabet := [68]byte{ 'A','B','C','D','E','F','G','H','I','J','K','L',
+            'M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','0','1',
+            '2','3','4','5','6','7','8','9','~','!','@','#','$','%','^','&',
+            '*','(',')','-','_','=','+','{','}','[',']','\\','|','/','.','<',
+            '>',',','`','?','\'','"',':',';'}
 
     // loop through the entire alphabet testing
-    for i:=0; i<26; i++ {
+    for i:=0; i<68; i++ {
         letter := byte(alphabet[i])
         checkAgainstFile(letter,scanner)
     }
@@ -59,7 +62,7 @@ func checkAgainstFile(letter byte, scanner *bufio.Scanner) {
         //}
         //if (strings.Contains(xstringLower, "e")) {
             fmt.Println(xstringLower)
-        //}
+       // }
     }
 }
 
