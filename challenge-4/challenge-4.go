@@ -6,9 +6,8 @@ import (
     "os"
     "bufio"
     "com/blakebartenbach/cryptopals/challenge-1"
-    "bytes"
-    "com/blakebartenbach/cryptopals/challenge-2"
     "strings"
+    "github.com/hashicorp/vault/helper/xor"
 )
 
 func main() {
@@ -21,41 +20,47 @@ func main() {
     check(err)
 
     // defer closing file
-    defer file.Close()
+//    defer file.Close()
 
     // create a file scanner to read lines
-    scanner := bufio.NewScanner(file)
 
     // create alphabet array
-    alphabet := [68]byte{ 'A','B','C','D','E','F','G','H','I','J','K','L',
-            'M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','0','1',
-            '2','3','4','5','6','7','8','9','~','!','@','#','$','%','^','&',
-            '*','(',')','-','_','=','+','{','}','[',']','\\','|','/','.','<',
-            '>',',','`','?','\'','"',':',';'}
+    alphabet := [68]string{ "A","B","C","D","E","F","G","H","I","J","K","L",
+            "M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","0","1",
+            "2","3","4","5","6","7","8","9","~","!","@","#","$","%","^","&",
+            "*","(",")","-","_","=","+","{","}","[","]","\\","|","/",".","<",
+            ">",",","`","?","\"","\"",":",";"}
 
     // loop through the entire alphabet testing
     for i:=0; i<68; i++ {
-        letter := byte(alphabet[i])
-        checkAgainstFile(letter,scanner)
+        scanner := bufio.NewScanner(file)
+        fmt.Println(i)
+        var letter string = alphabet[i]
+        checkAgainstFile(&letter,scanner)
     }
 }
 
-func checkAgainstFile(letter byte, scanner *bufio.Scanner) {
+func checkAgainstFile(letter *string, scanner *bufio.Scanner) {
     // create array to XOR bytes against
-    s0 := bytes.Repeat([]byte{letter}, 30)
-    lowercase := strings.ToLower(string(letter))
-    lowercasebyte := []byte(lowercase)
-    s1 := bytes.Repeat([]byte{lowercasebyte[0]}, 30)
+    s0 := strings.Repeat(*letter, 30)
+    lowercase := strings.ToLower(*letter)
+    lowercasebyte := string(lowercase)
+    s1 := strings.Repeat(lowercasebyte, 30)
     // scan file line by line and XOR against array
     for scanner.Scan() {
         var decoded = challenge_1.DecodeHex(scanner.Text())
-        var xored = challenge_2.XORvalues(s0, decoded)
-        var xoredLower = challenge_2.XORvalues(s1, decoded)
+        //var xored = challenge_2.XORvalues(s0, decoded)
+        fmt.Println(s0)
+        fmt.Println(s1)
+        fmt.Println(string(decoded))
+        var xored, _ = xor.XORBase64(s0, string(decoded))
+        //var xoredLower = challenge_2.XORvalues(s1, decoded)
+        var xoredLower, _ = xor.XORBase64(s1,string(decoded))
         var xstring string = string(xored)
         var xstringLower string = string(xoredLower)
 
         // attempt to cut down on crap by scoring the english language
-        // likely any english sentence will contain an 'e' whereas most
+        // likely any english sentence will contain an "e" whereas most
         // of the junk that comes out does not...
         //if (strings.Contains(xstring, "e")) {
             fmt.Println(xstring)
