@@ -5,6 +5,7 @@ import (
     "../challenge-2"
     "../challenge-3"
     "../challenge-4"
+    "../challenge-5"
 )
 
     // uncomment to run challenge
@@ -13,6 +14,7 @@ func main() {
     //challenge2()
     //challenge3()
     //challenge4()
+    challenge5()
 }
 
 func challenge1() {
@@ -29,4 +31,8 @@ func challenge3() {
 
 func challenge4() {
     challenge_4.Challenge4()
+}
+
+func challenge5() {
+    challenge_5.Challenge5()
 }
