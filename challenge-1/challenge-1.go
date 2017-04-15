@@ -9,6 +9,20 @@ import (
     "encoding/base64"
 )
 
+func Challenge1() {
+     // get input string
+    var value string = GetString()
+
+    // decode hex
+    var decoded []byte = DecodeHex(value)
+
+    // encode base64
+    var encoded = EncodeBase64(decoded)
+
+    // print result
+    fmt.Println(string(encoded))
+}
+
 func GetString() string {
     reader := bufio.NewReader(os.Stdin)
     fmt.Print("Enter string: ")
