@@ -1,21 +1,42 @@
 package challenge_5
 
-import "bytes"
-
-/*
-    input: Burning 'em, if you ain't quick and nimble
-I go crazy when I hear a cymbal
-
-    output: 0b3637272a2b2e63622c2e69692a23693a2a3c6324202d623d63343c2a26226324272765272
-a282b2f20430a652e2c652a3124333a653e2b2027630c692b20283165286326302e27282f
-
- */
+import (
+	"../challenge-1"
+	"../challenge-2"
+	"encoding/hex"
+	"fmt"
+)
 
 func Challenge5() {
-    var s0 []byte = bytes.Repeat([]byte{'a'}, x)
+	// get the string we will be XORing
+	var input string = challenge_1.GetString()
+	var binput []byte = []byte(input)
+	var binputLength int = len(binput)
+
+	// get the XOR sequence
+	var xor string = challenge_1.GetString()
+	var bxor []byte = []byte(xor)
+
+	// create repeating-key XOR
+	var repeatingXORkey []byte = getRepeatingXOR(bxor, binputLength)
+
+	// XOR the input string and the repeating-key
+	var XORed []byte = challenge_2.XORvalues(binput, repeatingXORkey)
+	var encoded string = hex.EncodeToString(XORed)
+	fmt.Println(encoded)
 }
 
-// this is going to suck balls
-func GetRepeatingXORArray(chars []byte, times int) []byte {
-
+// Accepts byte array of XOR data & needs length of string that it will be XORed against
+func getRepeatingXOR(xor []byte, length int) []byte {
+	s1 := make([]byte, length)
+	var j int = 0
+	for i := 0; i < length; i++ {
+		s1[i] = xor[j]
+		if j >= (len(xor) - 1) {
+			j = 0
+		} else {
+			j++
+		}
+	}
+	return s1
 }
