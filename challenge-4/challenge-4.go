@@ -26,12 +26,12 @@ func Challenge4() {
 		'*', '(', ')', '-', '_', '=', '+', '{', '}', '[', ']', '\\', '|', '/', '.', '<',
 		'>', ',', '`', '?', '\'', '\'', ':', ';'}
 	// loop through the entire alphabet testing
-	for i, _ := range alphabet {
+	for i := range alphabet {
 		// get our current character
 		var letter = alphabet[i]
 		fmt.Println("Current letter " + string(letter))
 
-		for j, _ := range elements {
+		for j := range elements {
 			var decoded []byte = challenge_1.DecodeHex(elements[j].element)
 			s0 := bytes.Repeat([]byte{letter}, 30)
 			var xored = challenge_2.XORvalues(decoded, s0)
