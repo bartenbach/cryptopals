@@ -1,14 +1,14 @@
 package challenge_4
 
 import (
-	"../challenge-1"
-	"../challenge-2"
+	"com/blakebartenbach/cryptopals/challenge-1"
 	"bufio"
 	"bytes"
 	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
+	"com/blakebartenbach/cryptopals/challenge-2"
 )
 
 type EncodedElement struct {
@@ -17,7 +17,7 @@ type EncodedElement struct {
 
 func Challenge4() {
 	// create slice of elements from file
-	var elements []EncodedElement = getEncodedElements("challenge-4/4.txt")
+	var elements []EncodedElement = GetEncodedElements("challenge-4/4.txt")
 
 	// create alphabet array of bytes to XOR against
 alphabet := [68]byte{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',

@@ -1,11 +1,11 @@
 package challenge_2
 
 import (
-	"../challenge-1"
 	"encoding/hex"
 	"fmt"
 	"github.com/hashicorp/vault/helper/xor"
 	"log"
+	"com/blakebartenbach/cryptopals/challenge-1"
 )
 
 func Challenge2() {
