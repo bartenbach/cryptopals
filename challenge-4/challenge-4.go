@@ -17,10 +17,10 @@ type EncodedElement struct {
 
 func Challenge4() {
 	// create slice of elements from file
-	var elements []EncodedElement = getEncodedElements()
+	var elements []EncodedElement = getEncodedElements("challenge-4/4.txt")
 
 	// create alphabet array of bytes to XOR against
-	alphabet := [68]byte{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
+alphabet := [68]byte{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
 		'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1',
 		'2', '3', '4', '5', '6', '7', '8', '9', '~', '!', '@', '#', '$', '%', '^', '&',
 		'*', '(', ')', '-', '_', '=', '+', '{', '}', '[', ']', '\\', '|', '/', '.', '<',
@@ -42,8 +42,8 @@ func Challenge4() {
 	}
 }
 
-func getEncodedElements() []EncodedElement {
-	path, err := filepath.Abs("challenge-4/4.txt")
+func GetEncodedElements(fpath string) []EncodedElement {
+	path, err := filepath.Abs(fpath)
 	check(err)
 
 	file, err := os.Open(path)
