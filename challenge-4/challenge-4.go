@@ -12,7 +12,7 @@ import (
 )
 
 type EncodedElement struct {
-	element string
+	Value string
 }
 
 func Challenge4() {
@@ -32,7 +32,7 @@ alphabet := [68]byte{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
 		fmt.Println("Current letter " + string(letter))
 
 		for j := range elements {
-			var decoded []byte = challenge_1.DecodeHex(elements[j].element)
+			var decoded []byte = challenge_1.DecodeHex(elements[j].Value)
 			s0 := bytes.Repeat([]byte{letter}, 30)
 			var xored = challenge_2.XORvalues(decoded, s0)
 			if strings.Contains(string(xored), "the") {
@@ -55,7 +55,7 @@ func GetEncodedElements(fpath string) []EncodedElement {
 
 	var elements []EncodedElement
 	for scanner.Scan() {
-		elements = append(elements, EncodedElement{element: scanner.Text()})
+		elements = append(elements, EncodedElement{Value: scanner.Text()})
 	}
 	return elements
 }
