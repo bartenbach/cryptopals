@@ -1,9 +1,9 @@
 package challenge_3
 
 import (
-	"../challenge-1"
-	"../challenge-2"
 	"bytes"
+	"com/blakebartenbach/cryptopals/challenge-1"
+	"com/blakebartenbach/cryptopals/challenge-2"
 	"fmt"
 )
 
