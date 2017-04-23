@@ -1,11 +1,9 @@
 package challenge_2
 
 import (
+	"com/blakebartenbach/cryptopals/challenge-1"
 	"encoding/hex"
 	"fmt"
-	"github.com/hashicorp/vault/helper/xor"
-	"log"
-	"com/blakebartenbach/cryptopals/challenge-1"
 )
 
 func Challenge2() {
@@ -18,17 +16,25 @@ func Challenge2() {
 	var decoded2 = challenge_1.DecodeHex(input2)
 
 	// XOR against each other and encode to hex
-	var xored = XORvalues(decoded, decoded2)
-	fmt.Println(hex.EncodeToString(xored))
+	var xored, err = XORvalues(decoded, decoded2)
+	if err != nil {
+		fmt.Println(hex.EncodeToString(xored))
+	} else {
+		fmt.Println(err)
+	}
 }
 
 // This has no test
-func XORvalues(value1, value2 []byte) []byte {
-	var xored, err = xor.XORBytes(value1, value2)
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	} else {
-		return xored
+func XORvalues(value1, value2 []byte) ([]byte, error) {
+	if len(value1) != len(value2) {
+		return nil, fmt.Errorf("Lengths of byte slices are not equal! %d != %d", len(value1), len(value2))
 	}
+
+	buffer := make([]byte, len(value1))
+
+	for i := range value1 {
+		buffer[i] = value1[i] ^ value2[i]
+	}
+
+	return buffer, nil
 }
