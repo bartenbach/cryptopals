@@ -4,6 +4,7 @@ import (
 	"com/blakebartenbach/cryptopals/challenge-1"
 	"encoding/hex"
 	"fmt"
+	"log"
 )
 
 func Challenge2() {
@@ -18,9 +19,9 @@ func Challenge2() {
 	// XOR against each other and encode to hex
 	var xored, err = XORvalues(decoded, decoded2)
 	if err != nil {
-		fmt.Println(hex.EncodeToString(xored))
+		log.Fatal(err)
 	} else {
-		fmt.Println(err)
+		fmt.Println(hex.EncodeToString(xored))
 	}
 }
 

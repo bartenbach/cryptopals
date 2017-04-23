@@ -5,6 +5,7 @@ import (
 	"com/blakebartenbach/cryptopals/challenge-1"
 	"com/blakebartenbach/cryptopals/challenge-2"
 	"fmt"
+	"log"
 )
 
 func Challenge3() {
@@ -14,6 +15,10 @@ func Challenge3() {
 
 	// would you believe I guessed this immediately?
 	s0 := bytes.Repeat([]byte{'X'}, 34)
-	var xored = challenge_2.XORvalues(decoded, s0)
-	fmt.Println(string(xored))
+	var xored, err = challenge_2.XORvalues(decoded, s0)
+	if err != nil {
+		fmt.Println(string(xored))
+	} else {
+		log.Fatal(err)
+	}
 }

@@ -50,8 +50,6 @@ func Challenge6() {
 }
 
 func HammingDistance(x, y string) (int, error) {
-	// I think these have to be the same size
-	// What can I return here?
 	if len(x) != len(y) {
 		return 0, fmt.Errorf("String lengths not equal! %d != %d", len(x), len(y))
 	}

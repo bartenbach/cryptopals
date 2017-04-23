@@ -5,6 +5,7 @@ import (
 	"com/blakebartenbach/cryptopals/challenge-2"
 	"encoding/hex"
 	"fmt"
+	"log"
 )
 
 func Challenge5() {
@@ -21,7 +22,10 @@ func Challenge5() {
 	var repeatingXORkey []byte = GetRepeatingXOR(bxor, binputLength)
 
 	// XOR the input string and the repeating-key
-	var XORed []byte = challenge_2.XORvalues(binput, repeatingXORkey)
+	var XORed, err = challenge_2.XORvalues(binput, repeatingXORkey)
+	if err != nil {
+		log.Fatal(err)
+	}
 	var encoded string = hex.EncodeToString(XORed)
 	fmt.Println(encoded)
 }

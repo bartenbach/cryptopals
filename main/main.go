@@ -12,11 +12,11 @@ import (
 // uncomment to run challenge
 func main() {
 	//challenge1()
-	//challenge2()
+	challenge2()
 	//challenge3()
 	//challenge4()
 	//challenge5()
-	challenge6()
+	//challenge6()
 }
 
 func challenge1() {
@@ -40,5 +40,5 @@ func challenge5() {
 }
 
 func challenge6() {
-    challenge_6.Challenge6()
+	challenge_6.Challenge6()
 }
