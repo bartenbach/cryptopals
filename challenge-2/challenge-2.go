@@ -25,7 +25,6 @@ func Challenge2() {
 	}
 }
 
-// This has no test
 func XORvalues(value1, value2 []byte) ([]byte, error) {
 	if len(value1) != len(value2) {
 		return nil, fmt.Errorf("Lengths of byte slices are not equal! %d != %d", len(value1), len(value2))
