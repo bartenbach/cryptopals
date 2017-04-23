@@ -17,8 +17,8 @@ func Challenge3() {
 	s0 := bytes.Repeat([]byte{'X'}, 34)
 	var xored, err = challenge_2.XORvalues(decoded, s0)
 	if err != nil {
-		fmt.Println(string(xored))
-	} else {
 		log.Fatal(err)
+	} else {
+		fmt.Println(string(xored))
 	}
 }
