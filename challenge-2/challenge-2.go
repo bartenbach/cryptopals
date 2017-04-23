@@ -16,7 +16,6 @@ func Challenge2() {
 	// get second hex value and decode
 	var input2 string = challenge_1.GetString()
 	var decoded2 = challenge_1.DecodeHex(input2)
-	fmt.Println(decoded2)
 
 	// XOR against each other and encode to hex
 	var xored = XORvalues(decoded, decoded2)

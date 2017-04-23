@@ -4,6 +4,7 @@ import (
     "com/blakebartenbach/cryptopals/challenge-4"
     "fmt"
     "encoding/base64"
+    "com/blakebartenbach/cryptopals/challenge-1"
 )
 
 func Challenge6() {
@@ -16,4 +17,13 @@ func Challenge6() {
             fmt.Println(data)
         }
     }
+
+    var input1 string = challenge_1.GetString()
+    var input2 string = challenge_1.GetString()
+
 }
+
+func HammingDistance(x,y string) {
+    
+}
+
