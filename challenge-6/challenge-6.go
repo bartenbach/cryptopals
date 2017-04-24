@@ -1,7 +1,6 @@
 package challenge_6
 
 import (
-	"com/blakebartenbach/cryptopals/challenge-1"
 	"com/blakebartenbach/cryptopals/challenge-4"
 	"encoding/base64"
 	"fmt"
@@ -27,6 +26,7 @@ var table = [256]uint8{
 }
 
 func Challenge6() {
+    // Read in elements from encrypted file - store them in a slice of EncodedElements (really just strings)
 	var elements []challenge_4.EncodedElement = challenge_4.GetEncodedElements("challenge-6/6.txt")
 	for i := range elements {
 		data, err := base64.StdEncoding.DecodeString(elements[i].Value)
@@ -37,15 +37,14 @@ func Challenge6() {
 		}
 	}
 
-	var input1 string = challenge_1.GetString()
-	var input2 string = challenge_1.GetString()
-	hammingd, err := HammingDistance(input1, input2)
+    //Guess our keysize.  I have no fucking clue?
+    keysize := 2
 
-	if err != nil {
-		fmt.Printf("%s", err)
-	} else {
-		fmt.Println("Hamming distance: ", hammingd)
-	}
+    // Using our keysize, calculate hamming distance between two keys
+    for j := range elements {
+        // need to get the first <keysize> worth of bytes
+
+    }
 
 }
 
