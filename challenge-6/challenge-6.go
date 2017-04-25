@@ -26,7 +26,7 @@ var table = [256]uint8{
 }
 
 func Challenge6() {
-    // Read in elements from encrypted file - store them in a slice of EncodedElements (really just strings)
+	// Read in elements from encrypted file - store them in a slice of EncodedElements (really just strings)
 	var elements []challenge_4.EncodedElement = challenge_4.GetEncodedElements("challenge-6/6.txt")
 	for i := range elements {
 		data, err := base64.StdEncoding.DecodeString(elements[i].Value)
@@ -37,14 +37,23 @@ func Challenge6() {
 		}
 	}
 
-    //Guess our keysize.  I have no fucking clue?
-    keysize := 2
+	//Guess our keysize.  Will have to find the keysize with the shortest hamming distance.
+	// should I do this manually or programmatically?
+	keysize := 4
 
-    // Using our keysize, calculate hamming distance between two keys
-    for j := range elements {
-        // need to get the first <keysize> worth of bytes
+	// Using our keysize, calculate hamming distance between two keys
+	for j := 0; j < len(elements); j += keysize {
+		// need to get the first <keysize> worth of bytes
+		byte1 := elements[j]
+		byte2 := elements[j+1]
+		hammingd, err := HammingDistance(byte1.Value, byte2.Value)
+		if err != nil {
+			println("ERROR: ", err)
+		} else {
+			fmt.Printf("Hamming distance: %d\n", hammingd)
+		}
 
-    }
+	}
 
 }
 
