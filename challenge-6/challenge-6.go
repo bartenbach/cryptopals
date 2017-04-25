@@ -44,20 +44,23 @@ func Challenge6() {
 	// Using our keysize, calculate hamming distance between two keys
 	for j := 0; j < len(elements); j += keysize {
 		// need to get the first <keysize> worth of bytes
-		byte1 := elements[j]
-		byte2 := elements[j+1]
-		hammingd, err := HammingDistance(byte1.Value, byte2.Value)
+
+		// wow...this is confusing
+		bytes1 := elements[j : j+keysize]
+		bytes2 := elements[j+keysize : j+(keysize*2)]
+		hammingd, err := HammingDistance(bytes1, bytes2)
 		if err != nil {
 			println("ERROR: ", err)
 		} else {
-			fmt.Printf("Hamming distance: %d\n", hammingd)
+			// normalize hamming distance by dividing by the keysize
+			fmt.Printf("Hamming distance: %d\n", hammingd/keysize)
 		}
 
 	}
 
 }
 
-func HammingDistance(x, y string) (int, error) {
+func HammingDistance(x, y []byte) (int, error) {
 	if len(x) != len(y) {
 		return 0, fmt.Errorf("String lengths not equal! %d != %d", len(x), len(y))
 	}
