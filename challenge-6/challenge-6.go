@@ -27,6 +27,10 @@ var table = [256]uint8{
 	4, 5, 5, 6, 5, 6, 6, 7, 5, 6, 6, 7, 6, 7, 7, 8,
 }
 
+type EncodedBlock struct {
+	Block []byte
+}
+
 func Challenge6() {
 	// Read in elements from file and decode them
 	var elements []byte = GetStringFromFile("challenge-6/6.txt")
@@ -49,6 +53,14 @@ func Challenge6() {
 
 	fmt.Printf("The shortest hamming distance found was: %d\n", shortestDistance)
 	fmt.Printf("The corresponding keysize was: %d\n", shortestKeysize)
+
+	fmt.Printf("\n\nBreaking up ciphertext into <keysize> blocks...\n\n")
+
+	var blocks []EncodedBlock = GetEncodedBlocks(elements)
+}
+
+func GetEncodedBlocks(elements []byte) []EncodedBlock {
+
 }
 
 func CalculateEditDistance(keysize int, elements []byte) int {
