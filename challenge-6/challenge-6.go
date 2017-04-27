@@ -1,12 +1,11 @@
 package challenge_6
 
 import (
-//	"encoding/base64"
+	"bufio"
+	"encoding/base64"
 	"fmt"
-    "path/filepath"
-    "os"
-    "bufio"
-    "encoding/base64"
+	"os"
+	"path/filepath"
 )
 
 var table = [256]uint8{
@@ -29,44 +28,44 @@ var table = [256]uint8{
 }
 
 func Challenge6() {
-	// Read in elements from encrypted file - store them in a slice of EncodedElements (really just strings)
-    var elements []byte = GetStringFromFile("challenge-6/6.txt")
-    PrintPrettySlice(elements)
+	// Read in elements from file and decode them
+	var elements []byte = GetStringFromFile("challenge-6/6.txt")
 
-	//Guess our keysize.  Will have to find the keysize with the shortest hamming distance.
-	// should I do this manually or programmatically?
-	keysize := 4
+	// set variables to remember the shortest hamming distance, and the corresponding keysize
+	shortestDistance := 999
+	shortestKeysize := 0
 
-	// Using our keysize, calculate hamming distance between two keys
-    fmt.Printf("LENGTH OF STRING: %d\n", len(elements))
-    for j:=0; j <= (len(elements)/keysize); j+=(keysize*2) {
-        bytes1 := elements[j : j+keysize]
-        bytes2 := elements[j+keysize : j+(keysize*2)]
-        fmt.Printf("keysize worth of bytes1: ")
-        PrintPrettySlice(bytes1)
-        fmt.Printf("keysize worth of bytes2: ")
-        PrintPrettySlice(bytes2)
-        hammingd, err := HammingDistance(bytes1,bytes2)
-        if err != nil {
-            fmt.Printf("ERROR: %s", err)
-        } else {
-            fmt.Printf("Hamming Distance: %d\n", hammingd)
-        }
-     }
-        // need to get the first <keysize> worth of bytes from the element
-		// wow...this is confusing
-//		bytes1 := elements[j : j+keysize]
-//		bytes2 := elements[j+keysize : j+(keysize*2)]
-//		hammingd, err := HammingDistance(bytes1, bytes2)
-//		if err != nil {
-//			println("ERROR: ", err)
-//		} else {
-//			// normalize hamming distance by dividing by the keysize
-//			fmt.Printf("Hamming distance: %d\n", hammingd/keysize)
-//		}
+	// 'i' represents the guessed keysizes, guessing from 4 to 40
+	for i := 4; i <= 40; i++ {
+		// divide by (keysize) to normalize the result
+		var distance int = CalculateEditDistance(i, elements) / i
+		if distance < shortestDistance {
+			fmt.Printf("Shortest distance: %d\n", shortestDistance)
+			fmt.Printf("New shortest distance: %d\n", distance)
+			shortestDistance = distance
+			shortestKeysize = i
+		}
+	}
 
-//	}
+	fmt.Printf("The shortest hamming distance found was: %d\n", shortestDistance)
+	fmt.Printf("The corresponding keysize was: %d\n", shortestKeysize)
+}
 
+func CalculateEditDistance(keysize int, elements []byte) int {
+	bytes1 := elements[0:keysize]
+	bytes2 := elements[keysize : keysize*2]
+	fmt.Printf("keysize worth of bytes1: ")
+	PrintPrettySlice(bytes1)
+	fmt.Printf("keysize worth of bytes2: ")
+	PrintPrettySlice(bytes2)
+	hammingd, err := HammingDistance(bytes1, bytes2)
+	if err != nil {
+		fmt.Printf("ERROR: %s", err)
+		return 9999
+	} else {
+		fmt.Printf("Hamming Distance: %d\n", hammingd)
+		return hammingd
+	}
 }
 
 func HammingDistance(x, y []byte) (int, error) {
@@ -106,16 +105,17 @@ func GetStringFromFile(fpath string) []byte {
 
 	var elements []byte
 	for scanner.Scan() {
-        element, err := base64.StdEncoding.DecodeString(scanner.Text())
-        if err != nil {
-            fmt.Printf("ERROR: %s", err)
-        } else {
-		    elements = append(elements, []byte(element)...)
-        }
+		element, err := base64.StdEncoding.DecodeString(scanner.Text())
+		if err != nil {
+			fmt.Printf("ERROR: %s", err)
+		} else {
+			elements = append(elements, []byte(element)...)
+		}
 	}
 	return elements
 }
 
+// error boilerplate
 func check(e error) {
 	if e != nil {
 		panic(e)
