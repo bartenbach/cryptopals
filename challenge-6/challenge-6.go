@@ -31,6 +31,7 @@ type EncodedBlock struct {
 	Block []byte
 }
 
+// TODO: once solved, this has a TON of debug output that should be removed
 func Challenge6() {
 	// Read in elements from file and decode them
 	var elements []byte = GetStringFromFile("challenge-6/6.txt")
@@ -51,13 +52,15 @@ func Challenge6() {
 		}
 	}
 
-	fmt.Printf("The shortest hamming distance found was: %d\n", shortestDistance)
+	fmt.Printf("\n\nThe shortest hamming distance found was: %d\n", shortestDistance)
 	fmt.Printf("The corresponding keysize was: %d\n", shortestKeysize)
 
 	fmt.Printf("\n\nBreaking up ciphertext into <keysize> blocks...\n\n")
 
+	// split up ciphertext into <keysize> length blocks
 	var blocks []EncodedBlock = GetEncodedBlocks(shortestKeysize, elements)
 
+	// sanity debug output
 	for _, block := range blocks {
 		fmt.Printf("Block: %+v\n", block)
 	}
