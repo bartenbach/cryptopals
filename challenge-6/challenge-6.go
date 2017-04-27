@@ -56,11 +56,20 @@ func Challenge6() {
 
 	fmt.Printf("\n\nBreaking up ciphertext into <keysize> blocks...\n\n")
 
-	var blocks []EncodedBlock = GetEncodedBlocks(elements)
+	var blocks []EncodedBlock = GetEncodedBlocks(shortestKeysize, elements)
+
+	for _, block := range blocks {
+		fmt.Printf("Block: %+v\n", block)
+	}
 }
 
-func GetEncodedBlocks(elements []byte) []EncodedBlock {
-
+func GetEncodedBlocks(keysize int, elements []byte) []EncodedBlock {
+	var blocks []EncodedBlock
+	for j := 0; j < len(elements)/keysize; j += keysize {
+		bytes1 := elements[j : j+keysize]
+		blocks = append(blocks, EncodedBlock{Block: bytes1})
+	}
+	return blocks
 }
 
 func CalculateEditDistance(keysize int, elements []byte) int {
