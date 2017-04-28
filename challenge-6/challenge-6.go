@@ -31,6 +31,10 @@ type EncodedBlock struct {
 	Block []byte
 }
 
+type BigBlock struct {
+	Value []EncodedBlock
+}
+
 // TODO: once solved, this has a TON of debug output that should be removed
 func Challenge6() {
 	// Read in elements from file and decode them
@@ -59,11 +63,16 @@ func Challenge6() {
 
 	// split up ciphertext into <keysize> length blocks
 	var blocks []EncodedBlock = GetEncodedBlocks(shortestKeysize, elements)
+	println("LENGTH OF BLOCKS: ", len(blocks))
 
 	// sanity debug output
 	for _, block := range blocks {
 		fmt.Printf("Block: %+v\n", block)
 	}
+}
+
+func MakeBigBlocks(blocks []EncodedBlock) []BigBlock {
+
 }
 
 func GetEncodedBlocks(keysize int, elements []byte) []EncodedBlock {
