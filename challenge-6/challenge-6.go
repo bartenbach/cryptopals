@@ -2,10 +2,14 @@ package challenge_6
 
 import (
 	"bufio"
+	"bytes"
+	"com/blakebartenbach/cryptopals/challenge-2"
 	"encoding/base64"
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
+	"sort"
 )
 
 var table = [256]uint8{
@@ -27,12 +31,14 @@ var table = [256]uint8{
 	4, 5, 5, 6, 5, 6, 6, 7, 5, 6, 6, 7, 6, 7, 7, 8,
 }
 
-type EncodedBlock struct {
-	Block []byte
+var b64 = [38]byte{
+	'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
+	'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1',
+	'2', '3', '4', '5', '6', '7', '8', '9', '+', '/',
 }
 
-type BigBlock struct {
-	Value []EncodedBlock
+type EncodedBlock struct {
+	Block []byte
 }
 
 // TODO: once solved, this has a TON of debug output that should be removed
@@ -41,38 +47,59 @@ func Challenge6() {
 	var elements []byte = GetStringFromFile("challenge-6/6.txt")
 
 	// set variables to remember the shortest hamming distance, and the corresponding keysize
-	shortestDistance := 999
+	shortestDistance := 999.0
 	shortestKeysize := 0
+	var keysizes []int
 
-	// 'i' represents the guessed keysizes, guessing from 4 to 40
-	for i := 4; i <= 40; i++ {
+	// 'i' represents the guessed keysizes, guessing from 2 to 40
+	for i := 2; i <= 40; i++ {
 		// divide by (keysize) to normalize the result
-		var distance int = CalculateEditDistance(i, elements) / i
+		var distance float64 = CalculateEditDistance(i, elements) / float64(i)
+		keysizes = append(keysizes, i)
 		if distance < shortestDistance {
-			fmt.Printf("Shortest distance: %d\n", shortestDistance)
-			fmt.Printf("New shortest distance: %d\n", distance)
+			fmt.Printf("Shortest distance: %f\n", shortestDistance)
+			fmt.Printf("New shortest distance: %f\n", distance)
 			shortestDistance = distance
 			shortestKeysize = i
 		}
 	}
 
-	fmt.Printf("\n\nThe shortest hamming distance found was: %d\n", shortestDistance)
+	sort.Ints(keysizes)
+	fmt.Println("SORTED KEYSIZES")
+	fmt.Println(keysizes)
+
+	fmt.Printf("\n\nThe shortest hamming distance found was: %f\n", shortestDistance)
 	fmt.Printf("The corresponding keysize was: %d\n", shortestKeysize)
 
 	fmt.Printf("\n\nBreaking up ciphertext into <keysize> blocks...\n\n")
 
 	// split up ciphertext into <keysize> length blocks
 	var blocks []EncodedBlock = GetEncodedBlocks(shortestKeysize, elements)
-	println("LENGTH OF BLOCKS: ", len(blocks))
+	fmt.Printf("\n\nLENGTH OF BLOCKS: %d\n\n", len(blocks))
 
-	// sanity debug output
-	for _, block := range blocks {
-		fmt.Printf("Block: %+v\n", block)
+	for i := 0; i < 5; i++ {
+		var x []byte
+		for _, block := range blocks {
+			x = append(x, block.Block[i])
+		}
+		SingleCharacterXOR(x)
+		fmt.Printf("%s\n", string(x))
 	}
 }
 
-func MakeBigBlocks(blocks []EncodedBlock) []BigBlock {
+func SingleCharacterXOR(x []byte) {
+	for i := range b64 {
+		// get our current character
+		var letter = b64[i]
+		fmt.Println("Current letter " + string(letter))
 
+		s0 := bytes.Repeat([]byte{letter}, len(x))
+		var xored, err = challenge_2.XORvalues(x, s0)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(string(xored))
+	}
 }
 
 func GetEncodedBlocks(keysize int, elements []byte) []EncodedBlock {
@@ -84,7 +111,7 @@ func GetEncodedBlocks(keysize int, elements []byte) []EncodedBlock {
 	return blocks
 }
 
-func CalculateEditDistance(keysize int, elements []byte) int {
+func CalculateEditDistance(keysize int, elements []byte) float64 {
 	bytes1 := elements[0:keysize]
 	bytes2 := elements[keysize : keysize*2]
 	fmt.Printf("keysize worth of bytes1: ")
@@ -96,20 +123,20 @@ func CalculateEditDistance(keysize int, elements []byte) int {
 		fmt.Printf("ERROR: %s", err)
 		return 9999
 	} else {
-		fmt.Printf("Hamming Distance: %d\n", hammingd)
+		fmt.Printf("Hamming Distance: %f\n", hammingd)
 		return hammingd
 	}
 }
 
-func HammingDistance(x, y []byte) (int, error) {
+func HammingDistance(x, y []byte) (float64, error) {
 	if len(x) != len(y) {
 		return 0, fmt.Errorf("String lengths not equal! %d != %d", len(x), len(y))
 	}
 
-	var hammingd int = 0
+	var hammingd float64 = 0
 
 	for i := range x {
-		hammingd += int(table[(x[i] ^ y[i])])
+		hammingd += float64(table[(x[i] ^ y[i])])
 	}
 	return hammingd, nil
 }
@@ -138,6 +165,8 @@ func GetStringFromFile(fpath string) []byte {
 
 	var elements []byte
 	for scanner.Scan() {
+		// do i decode from base64 here or later?  does it matter?
+		//err = nil
 		element, err := base64.StdEncoding.DecodeString(scanner.Text())
 		if err != nil {
 			fmt.Printf("ERROR: %s", err)
