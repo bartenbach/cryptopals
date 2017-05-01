@@ -10,6 +10,7 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+	"strings"
 )
 
 var table = [256]uint8{
@@ -48,42 +49,59 @@ func Challenge6() {
 
 	// set variables to remember the shortest hamming distance, and the corresponding keysize
 	shortestDistance := 999.0
-	shortestKeysize := 0
-	var keysizes []int
+
+	// map to link hamming distances to keysizes.
+	var keysizes map[float64]int
+	keysizes = make(map[float64]int)
+	var distances []float64
 
 	// 'i' represents the guessed keysizes, guessing from 2 to 40
 	for i := 2; i <= 40; i++ {
 		// divide by (keysize) to normalize the result
 		var distance float64 = CalculateEditDistance(i, elements) / float64(i)
-		keysizes = append(keysizes, i)
+		keysizes[distance] = i
+		distances = append(distances, distance)
 		if distance < shortestDistance {
 			fmt.Printf("Shortest distance: %f\n", shortestDistance)
 			fmt.Printf("New shortest distance: %f\n", distance)
 			shortestDistance = distance
-			shortestKeysize = i
 		}
 	}
 
-	sort.Ints(keysizes)
+	fmt.Println("Sorting distances to find best 3 keysizes...")
+	sort.Float64s(distances)
+	fmt.Println("SORTED DISTANCES: ", distances)
 	fmt.Println("SORTED KEYSIZES")
-	fmt.Println(keysizes)
+	for key, value := range keysizes {
+		fmt.Println("Key: ", key, " Value: ", value)
+	}
+	var keysize1 = keysizes[distances[0]]
+	var keysize2 = keysizes[distances[1]]
+	var keysize3 = keysizes[distances[2]]
+	fmt.Println("BEST KEYSIZES: ", keysize1, keysize2, keysize3)
+	var ks []int
+	ks = append(ks, keysize1)
+	ks = append(ks, keysize2)
+	ks = append(ks, keysize3)
 
-	fmt.Printf("\n\nThe shortest hamming distance found was: %f\n", shortestDistance)
-	fmt.Printf("The corresponding keysize was: %d\n", shortestKeysize)
+	fmt.Printf("\n\nThe shortest hamming distance found was: %f\n", distances[0])
+	fmt.Printf("The corresponding keysize was: %d\n", keysize1)
 
 	fmt.Printf("\n\nBreaking up ciphertext into <keysize> blocks...\n\n")
 
 	// split up ciphertext into <keysize> length blocks
-	var blocks []EncodedBlock = GetEncodedBlocks(shortestKeysize, elements)
-	fmt.Printf("\n\nLENGTH OF BLOCKS: %d\n\n", len(blocks))
+	for _, v := range ks {
+		fmt.Println("CURRENT KEYSIZE: ", v)
+		var blocks []EncodedBlock = GetEncodedBlocks(v, elements)
+		fmt.Printf("\n\nLENGTH OF BLOCKS: %d\n\n", len(blocks))
 
-	for i := 0; i < 5; i++ {
-		var x []byte
-		for _, block := range blocks {
-			x = append(x, block.Block[i])
+		for i := 0; i < v; i++ {
+			var x []byte
+			for _, block := range blocks {
+				x = append(x, block.Block[i])
+			}
+			SingleCharacterXOR(x)
 		}
-		SingleCharacterXOR(x)
-		fmt.Printf("%s\n", string(x))
 	}
 }
 
@@ -98,7 +116,9 @@ func SingleCharacterXOR(x []byte) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println(string(xored))
+		if strings.Contains(string(xored), "e") {
+			fmt.Println(string(xored))
+		}
 	}
 }
 
