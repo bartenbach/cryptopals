@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
+	"unicode"
 )
 
 var table = [256]uint8{
@@ -105,6 +106,15 @@ func Challenge6() {
 	}
 }
 
+func IsAsciiPrintable(s string) bool {
+	for _, r := range s {
+		if r > unicode.MaxASCII || !unicode.IsPrint(r) {
+			return false
+		}
+	}
+	return true
+}
+
 func SingleCharacterXOR(x []byte) {
 	for i := range b64 {
 		// get our current character
@@ -116,9 +126,13 @@ func SingleCharacterXOR(x []byte) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		if strings.Contains(string(xored), "e") {
+		//if IsAsciiPrintable(string(xored)) {
+		if strings.Contains(string(xored), "the") {
+			fmt.Println(string(xored))
+		} else if IsAsciiPrintable(string(xored)) {
 			fmt.Println(string(xored))
 		}
+		//}
 	}
 }
 
