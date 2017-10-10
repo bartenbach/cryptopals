@@ -1,8 +1,9 @@
 package challenge3
 
-import "testing"
-
-import "com/blakebartenbach/cryptopals/challenge1"
+import (
+	"com/blakebartenbach/cryptopals/challenge1"
+	"testing"
+)
 
 func TestProblem3(t *testing.T) {
 	// get corpus

@@ -1,10 +1,9 @@
-package challenge4_test
+package challenge4
 
 import (
 	"com/blakebartenbach/cryptopals/challenge1"
 	"com/blakebartenbach/cryptopals/challenge3"
 	"io/ioutil"
-	"log"
 	"strings"
 	"testing"
 )
@@ -12,7 +11,6 @@ import (
 func TestProblem4(t *testing.T) {
 	// setup corpus
 	corpus := challenge3.GetCorpusFromFile("../challenge3/theodyssey.txt")
-	log.Println(corpus['A'])
 
 	// read in challenge file
 	file, err := ioutil.ReadFile("4.txt")
