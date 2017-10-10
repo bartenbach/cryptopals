@@ -1,6 +1,8 @@
 package challenge3
 
 import (
+	"io/ioutil"
+	"log"
 	"math"
 	"unicode/utf8"
 )
@@ -20,6 +22,17 @@ func BuildCorpus(input string) map[rune]float64 {
 		corpus[char] = corpus[char] / float64(total)
 	}
 	return corpus
+}
+
+// GetCorpusFromFile returns a corpus map from a given file path.
+// This is a convenience function that calls BuildCorpus with the
+// given file information and returns the map.
+func GetCorpusFromFile(fpath string) map[rune]float64 {
+	corpusFile, err := ioutil.ReadFile(fpath)
+	if err != nil {
+		log.Fatal("Failed to read corpus file:", err)
+	}
+	return BuildCorpus(string(corpusFile))
 }
 
 // ScoreText scores a string of text based on the input corpus.  Higher scores
@@ -47,7 +60,7 @@ func SingleCharXOR(input []byte, key byte) []byte {
 // testing all possible byte values and scoring them against the
 // corpus.  The highest scoring value will be returned as an array of
 // bytes
-func FindSingleXORKey(input []byte, corpus map[rune]float64) []byte {
+func FindSingleXORKey(input []byte, corpus map[rune]float64) ([]byte, float64) {
 	var bestScore float64
 	var result []byte
 	for key := byte(0); key < math.MaxUint8; key++ {
@@ -58,5 +71,5 @@ func FindSingleXORKey(input []byte, corpus map[rune]float64) []byte {
 			bestScore = score
 		}
 	}
-	return result
+	return result, bestScore
 }
