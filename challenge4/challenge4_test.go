@@ -3,7 +3,7 @@ package challenge4
 import (
 	"com/blakebartenbach/cryptopals/challenge1"
 	"com/blakebartenbach/cryptopals/challenge3"
-	"io/ioutil"
+	"com/blakebartenbach/cryptopals/challenge6"
 	"strings"
 	"testing"
 )
@@ -13,10 +13,8 @@ func TestProblem4(t *testing.T) {
 	corpus := challenge3.GetCorpusFromFile("../challenge3/theodyssey.txt")
 
 	// read in challenge file
-	file, err := ioutil.ReadFile("4.txt")
-	if err != nil {
-		t.Fatal("Failed to read challenge file:", err)
-	}
+	file := challenge6.ReadFile("4.txt")
+
 	var bestScore float64
 	var result []byte
 	for _, line := range strings.Split(string(file), "\n") {

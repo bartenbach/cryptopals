@@ -2,17 +2,11 @@ package challenge3
 
 import (
 	"io/ioutil"
-	"log"
 	"math"
 	"unicode/utf8"
 )
 
-// BuildCorpus uses a popular English text (Homer's The Odyssey),
-// to build a map of character frequency for English.  For any given
-// rune (character), there will be a corresponding frequency in the
-// form of a float64.  I would expect values like 'a' and 'e' to have
-// relatively high values compared to values like 'x' or 'z'
-func BuildCorpus(input string) map[rune]float64 {
+func buildCorpus(input string) map[rune]float64 {
 	corpus := make(map[rune]float64)
 	for _, char := range input {
 		corpus[char]++
@@ -25,14 +19,18 @@ func BuildCorpus(input string) map[rune]float64 {
 }
 
 // GetCorpusFromFile returns a corpus map from a given file path.
-// This is a convenience function that calls BuildCorpus with the
-// given file information and returns the map.
+// The map will map characters (runes) to their frequency in the text (float64).
+// For any given character (rune), there will be a corresponding
+// frequency contained in the map, that corresponds to the frequency
+// of that character within the provided text (usually a book). In
+// English text, characters like 'a' and 'i' will have relatively high
+// frequencies whereas values like 'x' and 'z' will be relatively low.
 func GetCorpusFromFile(fpath string) map[rune]float64 {
 	corpusFile, err := ioutil.ReadFile(fpath)
 	if err != nil {
-		log.Fatal("Failed to read corpus file:", err)
+		panic("Failed to read corpus file!")
 	}
-	return BuildCorpus(string(corpusFile))
+	return buildCorpus(string(corpusFile))
 }
 
 // ScoreText scores a string of text based on the input corpus.  Higher scores
