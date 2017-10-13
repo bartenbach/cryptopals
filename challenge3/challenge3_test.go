@@ -13,6 +13,6 @@ func TestProblem3(t *testing.T) {
 	input := challenge1.DecodeHex("1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736")
 
 	// find the key and log to console
-	result, _ := FindSingleXORKey(input, corpus)
+	result, _, _ := FindSingleXORKey(input, corpus)
 	t.Log(string(result))
 }

@@ -1,8 +1,10 @@
 package challenge6
 
 import (
+	"com/blakebartenbach/cryptopals/challenge3"
 	"encoding/base64"
 	"io/ioutil"
+	"math"
 	"math/bits"
 )
 
@@ -24,12 +26,14 @@ func CalculateHammingDistance(val1, val2 []byte) int {
 // returning the key size that had the lowest hamming distance.
 func GetRepeatingXORSize(input []byte, min int, max int) int {
 	var smallestKey float32
+	smallestKey = math.MaxFloat32
 	var likelyKey int
+	multiplier := 8
 	for i := min; i < max; i++ {
-		chunk1 := input[0:i]
-		chunk2 := input[i : i*2]
+		chunk1 := input[0 : i*multiplier]
+		chunk2 := input[i*multiplier : i*2*multiplier]
 		hammingd := float32(CalculateHammingDistance(chunk1, chunk2)) / float32(i)
-		if hammingd > smallestKey { // this is really confusing
+		if hammingd < smallestKey { // this is really confusing is this right?
 			smallestKey = hammingd
 			likelyKey = i
 		}
@@ -39,12 +43,17 @@ func GetRepeatingXORSize(input []byte, min int, max int) int {
 
 // GetRepeatingXORKey takes the input with the likely keysize, and attempts
 // to derive the key (which it then returns)
-func GetRepeatingXORKey(input []byte, keySize int) []byte {
-	columns := make([]byte, len(input)/keySize)
+func GetRepeatingXORKey(input []byte, keySize int, corpus map[rune]float64) []byte {
+	column := make([]byte, len(input)/keySize)
+	key := make([]byte, keySize)
 	for col := 0; col < keySize; col++ {
-
+		for i := range column {
+			column[i] = input[i*keySize+col]
+		}
+		_, _, k := challenge3.FindSingleXORKey(column, corpus)
+		key[col] = k
 	}
-	return columns
+	return key
 }
 
 // DecodeBase64 decodes an input string from base64

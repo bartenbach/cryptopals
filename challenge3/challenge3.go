@@ -57,17 +57,19 @@ func SingleCharXOR(input []byte, key byte) []byte {
 // FindSingleXORKey attempts to find the key to a single character XOR by
 // testing all possible byte values and scoring them against the
 // corpus.  The highest scoring value will be returned as an array of
-// bytes
-func FindSingleXORKey(input []byte, corpus map[rune]float64) ([]byte, float64) {
+// bytes, along with the best score, and the key
+func FindSingleXORKey(input []byte, corpus map[rune]float64) ([]byte, float64, byte) {
 	var bestScore float64
 	var result []byte
+	var bestKey byte
 	for key := byte(0); key < math.MaxUint8; key++ {
 		xored := SingleCharXOR(input, key)
 		score := ScoreText(string(xored), corpus)
 		if score > bestScore {
 			result = xored
 			bestScore = score
+			bestKey = key
 		}
 	}
-	return result, bestScore
+	return result, bestScore, bestKey
 }

@@ -19,7 +19,7 @@ func TestProblem4(t *testing.T) {
 	var result []byte
 	for _, line := range strings.Split(string(file), "\n") {
 		decoded := challenge1.DecodeHex(line)
-		value, score := challenge3.FindSingleXORKey(decoded, corpus)
+		value, score, _ := challenge3.FindSingleXORKey(decoded, corpus)
 		if score > bestScore {
 			bestScore = score
 			result = value
